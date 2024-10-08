@@ -16,14 +16,12 @@ pipeline {
                     if ! command -v pipenv &> /dev/null
                     then
                         echo "pipenv is not installed, installing it..."
-                        python3 -m venv $HOME/venv  # Changed to use $HOME for compatibility
-                        source $HOME/venv/bin/activate  # Activating the virtual environment
-                        pip install --upgrade pip
+                        python3 -m venv /bitnami/jenkins/home/.local/venv
+                        source /bitnami/jenkins/home/.local/venv/bin/activate
                         pip install pipenv
                     else
                         echo "pipenv is already installed"
                     fi
-
                 '''
 
                 // Clean up old virtual environment if it exists
