@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        LABS = credentials('labcreds')  // Jenkins credentials ID for secure deployment
+        LABS = credentials('jupyter_lab_creds')  // Jenkins credentials ID for secure deployment
     }
 
     stages {
@@ -69,7 +69,7 @@ pipeline {
 
                 // Securely transfer files using sshpass and SCP
                 sh '''
-                    sshpass -p "$LABS_PSW" scp -o StrictHostKeyChecking=no -r ."$LABS_USR"@g01.itversity.com:/home/itv006277/retailproject
+                    sshpass -p "$LABS_PSW" scp -o StrictHostKeyChecking=no -r ."$LABS_USR"@g02.itversity.com:/home/itv014498/retailproject
                     if [ $? -eq 0 ]; then
                         echo "Deployment successful!"
                     else
