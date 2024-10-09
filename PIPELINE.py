@@ -1,9 +1,8 @@
-
 pipeline {
     agent any
 
     environment {
-        LABS = credentials('labcreds')  // Jenkins credentials ID for secure deployment
+        LABS = credentials('jupyter_lab_creds')  // Jenkins credentials ID for secure deployment
     }
 
     stages {
@@ -16,14 +15,12 @@ pipeline {
                     if ! command -v pipenv &> /dev/null
                     then
                         echo "pipenv is not installed, installing it..."
-                        python3 -m venv $HOME/venv  # Changed to use $HOME for compatibility
-                        source $HOME/venv/bin/activate  # Activating the virtual environment
-                        pip install --upgrade pip
+                        python3 -m venv /bitnami/jenkins/home/.local/venv
+                        source /bitnami/jenkins/home/.local/venv/bin/activate
                         pip install pipenv
                     else
                         echo "pipenv is already installed"
                     fi
-
                 '''
 
                 // Clean up old virtual environment if it exists
@@ -69,7 +66,7 @@ pipeline {
 
                 // Securely transfer files using sshpass and SCP
                 sh '''
-                    sshpass -p "$LABS_PSW" scp -o StrictHostKeyChecking=no -r ."$LABS_USR"@g01.itversity.com:/home/itv006277/retailproject
+                    sshpass -p "$LABS_PSW" scp -o StrictHostKeyChecking=no -r ."$LABS_USR"@g02.itversity.com:/home/itv014498/retailproject
                     if [ $? -eq 0 ]; then
                         echo "Deployment successful!"
                     else
